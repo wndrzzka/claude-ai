@@ -103,26 +103,29 @@
     const inputText = document.getElementById('inputText').value;
     const responseContainer = document.getElementById('responseContainer');
 
-    // Validasi input
     if (!inputText.trim()) {
         responseContainer.style.display = 'block';
         responseContainer.textContent = "Harap masukkan teks terlebih dahulu.";
         return;
     }
 
-    // Loading
     responseContainer.style.display = 'block';
-    responseContainer.textContent = "Memuat respon...";
+    responseContainer.textContent = "AI sedang memproses teks Anda, mohon tunggu...";
     responseContainer.classList.add('loading');
 
     try {
-        const response = await fetch(`https://api.siputzx.my.id/api/ai/claude-sonnet-35?content=${encodeURIComponent(inputText)}`);
+        const response = await fetch(`https://api.siputzx.my.id/api/ai/claude-sonnet-35`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ content: inputText }),
+        });
         const data = await response.json();
 
         responseContainer.classList.remove('loading');
-
         if (data && data.status) {
-            responseContainer.textContent = data.data; // Ambil dari properti 'data'
+            responseContainer.textContent = data.data;
         } else {
             responseContainer.textContent = "Respon tidak ditemukan.";
         }
@@ -131,7 +134,7 @@
         responseContainer.textContent = "Terjadi kesalahan saat mengakses API.";
         console.error(error);
     }
-}
+        }
     </script>
 </body>
 </html>
