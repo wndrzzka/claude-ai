@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            color: #333;
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #6a11cb;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            resize: none;
+        }
+
+        textarea:focus {
+            border-color: #6a11cb;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #6a11cb;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #2575fc;
+        }
+
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            color: #333;
+            text-align: left;
+        }
+
+        .response.loading {
+            color: #999;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Assistant</h1>
+        <p>Masukkan teks Anda untuk mendapatkan respons dari AI:</p>
+        <textarea id="inputText" rows="5" placeholder="Tulis sesuatu di sini..."></textarea>
+        <button onclick="fetchResponse()">Dapatkan Respon</button>
+        <div id="responseContainer" class="response" style="display: none;"></div>
+    </div>
+
+    <script>
+        async function fetchResponse() {
+            const inputText = document.getElementById('inputText').value;
+            const responseContainer = document.getElementById('responseContainer');
+
+            // Tampilkan placeholder respons
+            if (!inputText.trim()) {
+                responseContainer.style.display = 'block';
+                responseContainer.textContent = "Harap masukkan teks terlebih dahulu.";
+                return;
+            }
+
+            responseContainer.style.display = 'block';
+            responseContainer.textContent = "Memuat respon...";
+            responseContainer.classList.add('loading');
+
+            try {
+                const response = await fetch(`https://api.siputzx.my.id/api/ai/claude-sonnet-35?content=${encodeURIComponent(inputText)}`);
+                const data = await response.json();
+
+                responseContainer.classList.remove('loading');
+
+                if (data && data.response) {
+                    responseContainer.textContent = data.response;
+                } else {
+                    responseContainer.textContent = "Respon tidak ditemukan.";
+                }
+            } catch (error) {
+                responseContainer.classList.remove('loading');
+                responseContainer.textContent = "Terjadi kesalahan saat mengakses API.";
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
