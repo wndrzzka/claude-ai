@@ -97,44 +97,41 @@
         <button onclick="fetchResponse()">Dapatkan Respon</button>
         <div id="responseContainer" class="response" style="display: none;"></div>
     </div>
+   <script>
+    async function fetchResponse() {
+        const inputText = document.getElementById('inputText').value;
+        const responseContainer = document.getElementById('responseContainer');
 
-    <script>
-        async function fetchResponse() {
-    const inputText = document.getElementById('inputText').value;
-    const responseContainer = document.getElementById('responseContainer');
+        if (!inputText.trim()) {
+            responseContainer.style.display = 'block';
+            responseContainer.textContent = "Harap masukkan teks terlebih dahulu.";
+            return;
+        }
 
-    if (!inputText.trim()) {
         responseContainer.style.display = 'block';
-        responseContainer.textContent = "Harap masukkan teks terlebih dahulu.";
-        return;
-    }
+        responseContainer.textContent = "AI sedang memproses teks Anda, mohon tunggu...";
+        responseContainer.classList.add('loading');
 
-    responseContainer.style.display = 'block';
-    responseContainer.textContent = "AI sedang memproses teks Anda, mohon tunggu...";
-    responseContainer.classList.add('loading');
+        try {
+            // Menggunakan metode GET dan menambahkan parameter inputText ke dalam URL
+            const response = await fetch(`https://api.siputzx.my.id/api/ai/claude-sonnet-35?content=${encodeURIComponent(inputText)}`, {
+                method: "GET", // Mengubah metode menjadi GET
+            });
 
-    try {
-        const response = await fetch(`https://api.siputzx.my.id/api/ai/claude-sonnet-35`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ content: inputText }),
-        });
-        const data = await response.json();
+            const data = await response.json();
 
-        responseContainer.classList.remove('loading');
-        if (data && data.status) {
-            responseContainer.textContent = data.data;
-        } else {
-            responseContainer.textContent = "Respon tidak ditemukan.";
+            responseContainer.classList.remove('loading');
+            if (data && data.status) {
+                responseContainer.textContent = data.data;
+            } else {
+                responseContainer.textContent = "Respon tidak ditemukan.";
+            }
+        } catch (error) {
+            responseContainer.classList.remove('loading');
+            responseContainer.textContent = "Terjadi kesalahan saat mengakses API.";
+            console.error(error);
         }
-    } catch (error) {
-        responseContainer.classList.remove('loading');
-        responseContainer.textContent = "Terjadi kesalahan saat mengakses API.";
-        console.error(error);
     }
-        }
-    </script>
+   </script>
 </body>
 </html>
