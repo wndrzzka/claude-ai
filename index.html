@@ -113,7 +113,6 @@
         responseContainer.classList.add('loading');
 
         try {
-            // Menggunakan metode GET dan mengganti spasi dengan tanda "+"
             const formattedText = encodeURIComponent(inputText).replace(/%20/g, '+');
             const response = await fetch(`https://api.siputzx.my.id/api/ai/claude-sonnet-35?content=${formattedText}`, {
                 method: "GET",
@@ -123,7 +122,6 @@
 
             responseContainer.classList.remove('loading');
             if (data && data.status) {
-                // Menggunakan innerHTML untuk merender HTML
                 responseContainer.innerHTML = data.data;
             } else {
                 responseContainer.textContent = "Respon tidak ditemukan.";
