@@ -123,17 +123,17 @@
 
             responseContainer.classList.remove('loading');
             if (data && data.status) {
-                responseContainer.textContent = data.data;
+                // Menggunakan innerHTML untuk merender HTML
+                responseContainer.innerHTML = data.data;
             } else {
                 responseContainer.textContent = "Respon tidak ditemukan.";
             }
         } catch (error) {
             responseContainer.classList.remove('loading');
             responseContainer.textContent = "Terjadi kesalahan saat mengakses API.";
-            console.error('Error detail:', error);  // Menambahkan log error lebih rinci
+            console.error('Error detail:', error);
         }
     }
 </script>
-
 </body>
 </html>
